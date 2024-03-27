@@ -20,6 +20,9 @@ struct DestinationSearchView: View {
     
     @State private var selectedOptions: DestinationSearchOptions = .location
     
+    @State private var startDate = Date()
+    @State private var endDate  = Date()
+    
     //    @State private var selectedLocation = false
     //    @State private var selectedDates = false
     //    @State private var selectedGuests = false
@@ -74,20 +77,33 @@ struct DestinationSearchView: View {
                 withAnimation(.easeIn){ selectedOptions = .location }
             }
             
-            VStack{
+            
+            // Date selection view
+            VStack(alignment: .leading){
                 if selectedOptions == .dates {
-                    HStack{
-                        Text("Show Expanded View ")
-                        Spacer()
+                    Text("When's Ur Trip")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    VStack {
+                        DatePicker("From", selection: $startDate, displayedComponents: .date)
+                        
+                        Divider()
+                        
+                        DatePicker("To", selection: $endDate, displayedComponents: .date)
                     }
-                }else{
+                    .foregroundStyle(.gray)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                }
+                else{
                     
                     //date select view
                     PickerButtonView(title: "When? ", description: "Add your dates")
                 }
             }
             .padding()
-            .frame(height: selectedOptions == .dates ? 120 : 64)
+            .frame(height: selectedOptions == .dates ? 190 : 64)
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding()
@@ -99,10 +115,7 @@ struct DestinationSearchView: View {
             
             VStack{
                 if selectedOptions == .guests {
-                    HStack{
-                        Text("Show Expanded View ")
-                        Spacer()
-                    }
+                    Text("Who's Coming?")
                 }else{
                     //num view
                     PickerButtonView(title: "Who?", description: "Add your Guests")

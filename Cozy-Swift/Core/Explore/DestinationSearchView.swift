@@ -23,20 +23,38 @@ struct DestinationSearchView: View {
     @State private var startDate = Date()
     @State private var endDate  = Date()
     
+    @State private var numGuests = 0
     //    @State private var selectedLocation = false
     //    @State private var selectedDates = false
     //    @State private var selectedGuests = false
     var body: some View {
         VStack{
             
-            Button {
-                show.toggle()
-            }label: {
-                Image(systemName: "xmark")
-                    .imageScale(.large)
-                    .foregroundColor(.black)
+            HStack {
+                Button {
+                    show.toggle()
+                }label: {
+                    Image(systemName: "xmark.circle")
+                        .imageScale(.large)
+                        .foregroundColor(.black)
+                    
+                }
+                
+                Spacer()
+                
+                
+                if !destination.isEmpty {
+                    Button("Clear") {
+                        destination = ""
+                    }
+                    .foregroundStyle(.black)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                }
                 
             }
+            .padding()
             
             VStack(alignment: .leading) {
                 if selectedOptions ==  .location{
@@ -116,26 +134,50 @@ struct DestinationSearchView: View {
             VStack{
                 if selectedOptions == .guests {
                     Text("Who's Coming?")
+                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        .fontWeight(.semibold)
+                    
+                    Stepper{
+                        Text("\(numGuests) Adults")
+                    }onIncrement: {
+                        numGuests += 1
+                    }onDecrement: {
+                        guard numGuests > 0 else {return}
+                        numGuests -= 1
+                    }
                 }else{
                     //num view
                     PickerButtonView(title: "Who?", description: "Add your Guests")
                 }
             }
-            .padding()
+            .modifier(CollapsibleDestinationViewModifier())
             .frame(height: selectedOptions == .guests ? 120 : 64)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding()
-            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
             .onTapGesture {
-                withAnimation(.easeIn){ selectedOptions = .guests }
+                withAnimation(.easeIn){ selectedOptions = .guests
+                }
             }
+            Spacer()
         }
     }
 }
 
 #Preview {
     DestinationSearchView(show: .constant(false))
+}
+
+
+
+struct CollapsibleDestinationViewModifier: ViewModifier{
+    
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding()
+            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+            
+    }
 }
 
 struct PickerButtonView: View {

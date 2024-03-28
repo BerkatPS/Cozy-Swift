@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct ListingStarView: View {
+    let listing: Listing
+    
     var body: some View {
         HStack(spacing: 2){
             Image(systemName: "star.fill")
                 .foregroundColor(.warning)
             
-            Text("4.80")
+            Text("\(listing.rating)")
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 .foregroundStyle(.black)
         }
@@ -21,5 +23,5 @@ struct ListingStarView: View {
 }
 
 #Preview {
-    ListingStarView()
+    ListingStarView(listing: DeveloperPreview.shared.listings[0])
 }

@@ -13,10 +13,9 @@ struct ExploreView: View {
     @StateObject var viewModel = ExploreViewModel(service: ExploreService())
     var body: some View {
         NavigationStack{
-            
-            if showDestinationSearchView{
+            if showDestinationSearchView {
                 DestinationSearchView(show: $showDestinationSearchView)
-            }else{
+            } else {
                 ScrollView{
                     SearchAndFilterBar()
                         .onTapGesture {
@@ -27,7 +26,7 @@ struct ExploreView: View {
                     
                     LazyVStack(spacing: 40){
                         ForEach(viewModel.listings){ listing in
-                            NavigationLink(value: listing){
+                            NavigationLink(destination: ListingDetailView()) {
                                 ListingItemView(listing: listing)
                                     .frame(height: 400)
                                     .clipShape(RoundedRectangle(cornerRadius: 5))
@@ -37,10 +36,6 @@ struct ExploreView: View {
                     .padding(.top, 10)
                 }
                 .padding()
-                .navigationDestination(for: Int.self){listing in
-                    ListingDetailView()
-                        .navigationBarBackButtonHidden()
-                }
             }
         }
     }
@@ -49,3 +44,4 @@ struct ExploreView: View {
 #Preview {
     ExploreView()
 }
+
